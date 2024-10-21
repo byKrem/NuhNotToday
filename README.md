@@ -1,6 +1,6 @@
 # NuhNotToday
 
-[![ru](https://img.shields.io/badge/lang-en-red.svg)](README.ru.md)
+[![ru](https://img.shields.io/badge/lang-ru-red.svg)](README.ru.md)
 
 ---
 
