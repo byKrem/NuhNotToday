@@ -1,0 +1,16 @@
+﻿<Application x:Class="Presentation.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Presentation"
+             StartupUri="Views/MainWindow">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="ContrastedButton" Source="\themes\contrastedbutton.xaml"/>
+                <ResourceDictionary x:Name="SimpleButton" Source="\themes\simplebutton.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <SolidColorBrush x:Key="black" Color="#2B2D31"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
