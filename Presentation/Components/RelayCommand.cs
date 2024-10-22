@@ -18,7 +18,7 @@ namespace Presentation.Components
 
         public bool CanExecute(object parameter)
         {
-            if(parameter is null)
+            if(_canExecute == null)
             {
                 return true;
             }

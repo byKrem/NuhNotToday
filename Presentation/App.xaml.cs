@@ -11,10 +11,6 @@ namespace Presentation
     {
         public App()
         {
-            MainWindow window = new MainWindow();
-            window.DataContext = new MainWindowViewModel();
-
-            window.Show();
         }
     }
 }
