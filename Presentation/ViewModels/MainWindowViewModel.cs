@@ -91,7 +91,7 @@ namespace Presentation.ViewModels
             {
                 InitialDirectory = @"C:\",
                 Multiselect = true,
-                Filter = "*.exe"
+                Filter = "Executable files (*.exe)|*.exe"
             };
 
             if(openFileDialog.ShowDialog() == DialogResult.OK)
