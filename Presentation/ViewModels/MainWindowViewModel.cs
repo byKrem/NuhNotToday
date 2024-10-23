@@ -2,6 +2,8 @@
 using Presentation.Properties;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -61,7 +63,7 @@ namespace Presentation.ViewModels
             App.Current.MainWindow.Hide();
             NotifyIcon ni = new NotifyIcon();
             // TODO: Replace a placeholder with an actual icon.
-            // TODO: Make a unified class for such type of information, so I don't need to manually set choosed resource in "every single file"
+            // TODO: Make a separate class for such type of information, so I don't need to manually set choosed resource in "every single file"
             ni.Icon = Resources.placeholder;
             ni.Visible = true;
             ni.DoubleClick +=
@@ -81,10 +83,27 @@ namespace Presentation.ViewModels
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-
-                FilePath.Add(folderBrowserDialog.SelectedPath);
+                foreach(string path in TreeSearch(folderBrowserDialog.SelectedPath))
+                {
+                    FilePath.Add(path);
+                }
             }
         }
+
+        // TODO: Too slow... It takes almost a minute on my PC to scan 3_107 folders and 123_663 files... Maybe I can make it faster?
+        // TODO: Also I need to somehow make it not blocking UI thread
+        private string[] TreeSearch(string folderPath)
+        {
+            if (string.IsNullOrWhiteSpace(folderPath))
+            {
+                return new string[0];
+            }
+
+            DirectoryInfo folderInfo = new DirectoryInfo(folderPath);
+
+            return folderInfo.GetFiles("*.exe", SearchOption.AllDirectories).AsParallel().Select(x => x.FullName).ToArray();
+        }
+
         private void SelectFilePath(object parameter)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog() 
