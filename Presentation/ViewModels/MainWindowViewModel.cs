@@ -1,9 +1,9 @@
 ﻿using Presentation.Components;
 using Presentation.Properties;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -83,25 +83,42 @@ namespace Presentation.ViewModels
 
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                foreach(string path in TreeSearch(folderBrowserDialog.SelectedPath))
+                foreach (var path in TreeSearch(folderBrowserDialog.SelectedPath))
                 {
-                    FilePath.Add(path);
+                    FilePath.Add(path.FullName);
                 }
             }
         }
 
         // TODO: Too slow... It takes almost a minute on my PC to scan 3_107 folders and 123_663 files... Maybe I can make it faster?
         // TODO: Also I need to somehow make it not blocking UI thread
-        private string[] TreeSearch(string folderPath)
+        private IEnumerable<FileInfo> TreeSearch(string folderPath)
         {
             if (string.IsNullOrWhiteSpace(folderPath))
             {
-                return new string[0];
+                yield break;
             }
 
             DirectoryInfo folderInfo = new DirectoryInfo(folderPath);
 
-            return folderInfo.GetFiles("*.exe", SearchOption.AllDirectories).AsParallel().Select(x => x.FullName).ToArray();
+            List<DirectoryInfo> folders = new List<DirectoryInfo> { folderInfo };
+
+            int index = 1;
+            do
+            {
+                folders.AddRange(folderInfo.GetDirectories());
+
+                folderInfo = folders[index++];
+            }
+            while (index != folders.Count);
+
+            foreach (var folder in folders)
+            {
+                foreach (var file in folder.GetFiles("*.exe"))
+                {
+                    yield return file;
+                }
+            }
         }
 
         private void SelectFilePath(object parameter)

@@ -8,7 +8,11 @@ namespace Presentation.Components
         private readonly Action<object> _execute;
         private readonly Func<object, bool> _canExecute;
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
 
         internal RelayCommand(Action<object> execute, Func<object,bool> canExecute = null) 
         {
